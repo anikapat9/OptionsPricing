@@ -1,0 +1,10 @@
+# PyCharm
+.idea/
+.venv/
+__pycache__/
+*.pyc
+
+# Results and data
+results/
+data/market_data/*
+!data/market_data/.gitkeep
