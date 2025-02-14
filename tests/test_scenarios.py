@@ -1,14 +1,12 @@
-import sys
-import os
+import numpy as np
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src.comparison import OptionPriceComparison
+from src.comparison import OptionAnalysis
 import matplotlib.pyplot as plt
+import os
 
 
 def run_test_scenarios():
-    comparison = OptionPriceComparison()
+    comparison = OptionAnalysis()
 
     # Define different scenarios
     scenarios = {
@@ -37,26 +35,30 @@ def run_test_scenarios():
         print(f"\nTesting {scenario_name} scenario:")
         print("Parameters:", params)
 
-        # Run comparison
-        results = comparison.compare_prices(**params)
+        # Run comparison using full_comparison()
+        results = comparison.full_comparison(**params)
 
-        # Create plots
-        price_fig = comparison.plot_price_comparison(results)
-        conv_fig = comparison.plot_convergence(**params)
-
-        # Save plots to results directory
-        price_fig.savefig(f'results/price_comparison_{scenario_name.lower().replace(" ", "_")}.png')
-        conv_fig.savefig(f'results/convergence_{scenario_name.lower().replace(" ", "_")}.png')
+        # Create and save plot (if needed)
+        fig = comparison.plot_convergence(**params)
+        fig.savefig(f'results/convergence_{scenario_name.lower().replace(" ", "_")}.png')
         plt.close('all')  # Close figures to free memory
 
         # Print results
-        print(f"\nResults for {scenario_name}:")
-        print(f"Black-Scholes Call: ${results['BS_call']:.2f}")
-        print(f"Monte Carlo Call: ${results['MC_call']:.2f}")
-        print(f"Call 95% CI: (${results['Call_CI'][0]:.2f}, ${results['Call_CI'][1]:.2f})")
-        print(f"Black-Scholes Put: ${results['BS_put']:.2f}")
-        print(f"Monte Carlo Put: ${results['MC_put']:.2f}")
-        print(f"Put 95% CI: (${results['Put_CI'][0]:.2f}, ${results['Put_CI'][1]:.2f})")
+        print("\nCall Options:")
+        for method, price in results['European Call'].items():
+            print(f"{method}: ${price:.2f}")
+
+        print("\nPut Options:")
+        for method, price in results['European Put'].items():
+            print(f"{method}: ${price:.2f}")
+
+        if "American Put" in results:
+            print("\nAmerican Put:")
+            for method, price in results['American Put'].items():
+                if np.isnan(price):
+                    print(f"{method}: Not applicable")
+                else:
+                    print(f"{method}: ${price:.2f}")
 
         print("\n" + "=" * 50)
 
