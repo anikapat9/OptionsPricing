@@ -72,7 +72,7 @@ For custom parameters, modify the test files or create your own scripts using th
 | In the Money          | $17.66 / $17.64 / $17.68 | $2.79 / $2.79 / $2.80     |
 
 ### Comparison output:
-![convergence_at_the_money.png](results/convergence_at_the_money.png)
+![convergence_analysis.png](results/convergence_analysis.png)
 
 ---
 
