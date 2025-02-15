@@ -32,18 +32,32 @@ class OptionAnalysis:
         return pd.DataFrame(results)
 
     def plot_convergence(self, S0=100, K=100, T=1, r=0.05, sigma=0.2):
+        """Plot Monte Carlo and Binomial Tree convergence to Black-Scholes price."""
         steps = np.arange(10, 500, 10)
         bt_prices = [BinomialTree(S0, K, T, r, sigma, n).price_european('call') for n in steps]
         mc_prices = [MonteCarloOptionPricer(S0, K, T, r, sigma, n).price_european('call')
-                     for n in [100, 500, 1000, 5000, 10000, 50000, 100000]]
+                     for n in [100, 500, 1000, 5000, 10000]]
+        bs_price = self.bs.calculate_price(S0, K, T, r, sigma, 'call')
 
         fig, ax = plt.subplots(figsize=(10, 6))
-        ax.plot(steps, bt_prices, label='Binomial Tree')
-        ax.plot([10, 100, 500, 1000, 5000, 10000, 50000, 100000],
-                [self.bs.calculate_price(S0, K, T, r, sigma, 'call')] * 8,
-                'r--', label='Black-Scholes')
-        ax.set(xlabel='Number of Steps/Simulations', ylabel='Call Price',
-               title='Convergence of Pricing Methods')
-        ax.legend()
+
+        # Plot Binomial Tree prices
+        ax.plot(steps, bt_prices, label='Binomial Tree (Steps)', color='blue', linestyle='-')
+
+        # Plot Monte Carlo prices
+        mc_steps = [100, 500, 1000, 5000, 10000]
+        ax.scatter(mc_steps, mc_prices, label='Monte Carlo (Simulations)', color='green')
+
+        # Plot Black-Scholes price as a horizontal line
+        ax.axhline(y=bs_price, color='red', linestyle='--', label=f'Black-Scholes Price (${bs_price:.2f})')
+
+        # Add titles and labels
+        ax.set_title('Convergence of Pricing Methods', fontsize=14)
+        ax.set_xlabel('Number of Steps/Simulations', fontsize=12)
+        ax.set_ylabel('Option Price ($)', fontsize=12)
+        ax.legend(fontsize=10)
+        ax.grid(True)
+
         return fig
+
 

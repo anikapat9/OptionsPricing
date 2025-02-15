@@ -13,3 +13,11 @@ if __name__ == "__main__":
     # Convergence analysis plot
     fig = analyzer.plot_convergence()
     fig.savefig('convergence_analysis.png')
+
+if __name__ == "__main__":
+    analyzer = OptionAnalysis()
+
+    # Generate convergence plot
+    fig = analyzer.plot_convergence(S0=100, K=100, T=1, r=0.05, sigma=0.2)
+    fig.savefig('results/convergence_plot.png')  # Save the plot
+    fig.show()  # Display the plot

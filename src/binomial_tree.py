@@ -2,6 +2,17 @@ import numpy as np
 
 
 class BinomialTree:
+    """
+        Implements the Binomial Tree model for pricing European and American options.
+
+        Attributes:
+            S0 (float): Initial stock price.
+            K (float): Strike price.
+            T (float): Time to maturity (in years).
+            r (float): Risk-free interest rate.
+            sigma (float): Volatility of the underlying asset.
+            n_steps (int): Number of time steps in the binomial tree.
+    """
     def __init__(self, S0, K, T, r, sigma, n_steps=100):
         self.S0 = S0
         self.K = K
@@ -9,12 +20,21 @@ class BinomialTree:
         self.r = r
         self.sigma = sigma
         self.n = n_steps
-        self.dt = T / n_steps
-        self.u = np.exp(sigma * np.sqrt(self.dt))
-        self.d = 1 / self.u
-        self.p = (np.exp(r * self.dt) - self.d) / (self.u - self.d)
+        self.dt = T / n_steps  # Time step size
+        self.u = np.exp(sigma * np.sqrt(self.dt))  # Up factor
+        self.d = 1 / self.u  # Down factor
+        self.p = (np.exp(r * self.dt) - self.d) / (self.u - self.d)  # Risk-neutral probability
 
     def price_european(self, option_type='call'):
+        """
+                Prices a European option using the binomial tree model.
+
+                Args:
+                    option_type (str): 'call' for a call option or 'put' for a put option.
+
+                Returns:
+                    float: The price of the European option.
+        """
         stock = self.S0 * self.u ** (np.arange(self.n, -1, -1)) * self.d ** np.arange(0, self.n + 1)
         option = np.maximum(stock - self.K, 0) if option_type == 'call' else np.maximum(self.K - stock, 0)
 
