@@ -71,6 +71,9 @@ For custom parameters, modify the test files or create your own scripts using th
 | Out of the Money      | $5.09 / $5.10 / $5.10    | $10.21 / $10.22 / $10.23  |
 | In the Money          | $17.66 / $17.64 / $17.68 | $2.79 / $2.79 / $2.80     |
 
+### Comparison output:
+![convergence_at_the_money.png](results/convergence_at_the_money.png)
+
 ---
 
 ## **Issues & Limitations**
@@ -79,7 +82,6 @@ For custom parameters, modify the test files or create your own scripts using th
 3. Exotic options like Barrier or Lookback are partially implemented.
 
 ---
-
 ## **License**
 This project is licensed under the MIT License.
 
